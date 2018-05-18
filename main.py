@@ -1,8 +1,37 @@
 from Note import Note
 import constants as c
+import curses
 
-n1 = Note(c.NOTE_G, c.TONE_SHARP)
-print n1
-n2 = n1.up_half()
-print n2
-print n2.down_whole()
+w = curses.initscr()
+
+def print_option(option_num, text):
+	w.addstr(str(option_num) + ". " + text + "\n")
+
+def display_menu():
+	w.addstr("-"*10 + "Music Theory" + "-"*10 + "\n")
+	print_option(1, "set root")
+	print_option(2, "calculate interval")	
+
+response = None
+
+while True:
+	display_menu()
+	
+	if response != None:
+		w.addstr("RESPONSE: ")
+		w.addstr(response)
+		w.addstr("\n")
+	
+	w.addstr("Choose: ")
+	option = w.getstr()
+
+	w.clear()
+	w.refresh()
+
+	if int(option) == c.OPTION_EXIT:
+		w.addstr("Goodbye!\n")
+		break
+	else:
+		response = "Invalid"
+
+curses.endwin()
