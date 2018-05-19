@@ -1,37 +1,35 @@
 from Note import Note
+from Menu import Menu
 import constants as c
-import curses
-
-w = curses.initscr()
-
-def print_option(option_num, text):
-	w.addstr(str(option_num) + ". " + text + "\n")
-
-def display_menu():
-	w.addstr("-"*10 + "Music Theory" + "-"*10 + "\n")
-	print_option(1, "set root")
-	print_option(2, "calculate interval")	
 
 response = None
+root = Note(c.NOTE_C, c.TONE_NATURAL)
+menu = Menu()
 
 while True:
-	display_menu()
+	menu.display()
 	
-	if response != None:
-		w.addstr("RESPONSE: ")
-		w.addstr(response)
-		w.addstr("\n")
-	
-	w.addstr("Choose: ")
-	option = w.getstr()
+	menu.printstr("Choose: ")
+	option = int(menu.read_input())
 
-	w.clear()
-	w.refresh()
+	menu.refresh()
 
-	if int(option) == c.OPTION_EXIT:
-		w.addstr("Goodbye!\n")
+	if option == c.OPTN_EXIT:
 		break
+	elif option == c.OPTN_CHOOSE_ROOT:
+		menu.printstr("New root: ")
+		new_root = menu.read_input()
+		for n in c.NOTES:
+			if new_root == n:
+				root = Note(new_root, c.TONE_NATURAL)
+				break
 	else:
-		response = "Invalid"
+		menu.set_response("Invalid")
 
-curses.endwin()
+del menu
+
+
+
+
+
+

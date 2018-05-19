@@ -4,7 +4,6 @@ class Key:
 	def __init__(self, tonic):
 		self.tonic = tonic
 
-	# get notes
 	def get_notes(self):
 		notes = []
 		notes.append(tonic.interval(c.INTVL_MAJ_2))
