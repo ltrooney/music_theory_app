@@ -1,6 +1,7 @@
 import constants as c
 
 class Note:
+
 	def __init__(self, name, accidental):
 		self.name = name
 		self.accidental = accidental
@@ -33,11 +34,11 @@ class Note:
 		return Note(c.NOTES[(i+1) % 7], c.TONE_NATURAL)
 
 	def up_whole(self):
-		""" Get the note up two semitones (whole step)."""
+		""" Get the note up two semitones (whole step). """
 		return self.up_half().up_half()
 
 	def down_half(self):
-		""" Get the note down one semitone (half step)."""
+		""" Get the note down one semitone (half step). """
 		if self.name == c.NOTE_C:
 			return Note(c.NOTE_B, c.TONE_NATURAL)
 		elif self.name == c.NOTE_F:
@@ -49,11 +50,11 @@ class Note:
 		return Note(c.NOTES[(i-1) % 7], c.TONE_NATURAL)
 
 	def down_whole(self):
-		""" Get the note down two semitones (whole step)."""
+		""" Get the note down two semitones (whole step). """
 		return self.down_half().down_half()
 
 	def alt(self):
-		"""Turn flat note into relative sharp and vice versa."""
+		""" Turn flat note into relative sharp and vice versa. """
 		if self.accidental == c.TONE_SHARP:
 			n = self.up_half()
 			n.set_accidental(c.TONE_FLAT)
@@ -65,6 +66,7 @@ class Note:
 		return self
 
 	def interval(self, interval):
+		""" Get the note at a distance specified by the interval. """
 		n = self
 		for i in xrange(interval):
 			n = n.up_half()
