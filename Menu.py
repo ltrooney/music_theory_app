@@ -6,13 +6,23 @@ class Menu():
 	def __init__(self):
 		self.w = curses.initscr()
 		self.response = None
+		self.configure()
+
+	def __init__(self, stdscr):
+		self.w = stdscr
+		self.response = None
+		self.configure()
 
 	def __del__(self):
 		""" Reset the console."""
-		self.w.keypad(False)
-		curses.nocbreak()
-		curses.echo()
+		self.configure()
 		curses.endwin()
+
+	def configure(self):
+		""" Configure the console settings. """
+		self.w.keypad(False)
+		curses.echo()
+		curses.nocbreak()
 
 	def get_window(self):
 		""" Get the curses window instance."""
@@ -55,8 +65,7 @@ class Menu():
 
 	def printstr_ln(self, text):
 		""" Print text to the console with a newline character. """
-		self.printstr(text)
-		self.printstr('\n')
+		self.printstr(text + "\n")
 
 	def print_option(self, option_num, text):
 		""" Print an option with related text to the console. """
@@ -67,9 +76,11 @@ class Menu():
 		self.print_response()
 		self.printstr_ln("-"*10 + "Music Theory" + "-"*10)
 		self.print_option(c.OPTN_CHOOSE_ROOT, "set root")
+		self.print_option(c.OPTN_SHOW_ROOTS, "show roots")
 		self.print_option(c.OPTN_CALC_INTVL, "calculate interval")	
 		self.print_option(c.OPTN_GET_NOTES, "get notes")
 		self.print_option(c.OPTN_GET_CHORDS, "get chords")
+		self.printstr_ln("-  enter 0 to exit")
 
 	
 	# -----------------

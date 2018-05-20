@@ -2,11 +2,10 @@ from Note import Note
 from Menu import Menu
 import constants as c
 import re
+from curses import wrapper
 
 response = None
 root = Note(c.NOTE_C, c.TONE_NATURAL)
-
-menu = Menu()
 
 def parse_note(note_str):
 	""" Parse the input to determine the note and the accidental. 
@@ -20,23 +19,33 @@ def parse_note(note_str):
 	note_str = " ".join(note_str.split())	# remove duplicate whitespace
 	# TODO: don't match if '-' not followed by accidental
 	m = re.search('(A|B|C|D|E|F|G){1}(-| |)(b|flat|#|sharp){0,2}', note_str)
-	menu.printstr_ln(m.group(0))
+	return m.group(0)
 
-while True:
-	menu.display()
-	
-	menu.printstr("Choose: ")
-	option = int(menu.read_input())
+def main(stdscr):
+	menu = Menu(stdscr)
 
-	menu.refresh()
+	while True:
+		menu.display()
+		
+		menu.printstr("Choose: ")
+		option = int(menu.read_input())
 
-	if option == c.OPTN_EXIT:
-		break
-	elif option == c.OPTN_CHOOSE_ROOT:
-		menu.printstr("New root: ")
-		new_root_str = menu.read_input()
+		menu.refresh()
 
-		parse_note(new_root_str)
-	else:
-		menu.set_response("Invalid input.")
+		if option == c.OPTN_EXIT:
+			break
+		elif option == c.OPTN_CHOOSE_ROOT:
+			menu.printstr("New root: ")
+			new_root_str = menu.read_input()
+
+			menu.set_response(parse_note(new_root_str))
+
+			# TODO
+
+		else:
+			menu.set_response("Invalid input.")
+
+wrapper(main)
+
+
 
