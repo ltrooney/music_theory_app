@@ -1,10 +1,12 @@
 import constants as c
 
 class Note:
-
-	def __init__(self, name, accidental):
+	def __init__(self, name, accidental=None):
 		self.name = name
-		self.accidental = accidental
+		if accidental is None:
+			self.accidental = c.TONE_NATURAL
+		else:
+			self.accidental = accidental
 
 	def __str__(self):
 		return self.get_name() + self.get_accidental()

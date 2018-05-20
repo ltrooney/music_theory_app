@@ -1,9 +1,11 @@
-import constants as c
-from Note import Note
+from FretboardNote import FretboardNote
 
 class String:
 	def __init__(self, open):
 		self.set_open(open)
+
+	def __str__(self):
+		return str(self.get_open())
 
 	def set_open(self, open):
 		self.open = open
@@ -15,9 +17,10 @@ class String:
 		""" Find note(s) occurences on the string. """
 		n = self.open
 		matches = []
-		for i in range(num_frets):
+		for fret in range(num_frets):
 			if str(n) == str(note):
-				matches.append(i)
+				fb_note = FretboardNote(n.get_name(), n.get_accidental(), self, fret)
+				matches.append(fb_note)
 			n = n.up_half()
 		return matches
 
