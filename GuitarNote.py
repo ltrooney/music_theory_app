@@ -1,6 +1,6 @@
 from Note import Note
 
-class FretboardNote(Note):
+class GuitarNote(Note):
 	def __init__(self, name, accidental, string, fret):
 		Note.__init__(self, name, accidental)
 		self.set_string(string)
