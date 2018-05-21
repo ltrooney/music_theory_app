@@ -69,10 +69,16 @@ class Fretboard:
 		return self.plot(pattern=None)
 
 	def plot(self, pattern=None):
+		string_contains_root = False
 		""" Returns an ascii art image of the specified notes on the fretboard. """
 		def draw_note_on_string(s, note, string):
 			p_string = note.get_string()
 			p_fret = note.get_fret()
+
+			if p_fret == 0:
+				global string_contains_root
+				string_contains_root = True
+
 			# fill in occupied frets
 			if str(p_string) == str(string):
 				half_dashes = int(floor(dashes_per_fret/2))
@@ -94,33 +100,33 @@ class Fretboard:
 
 		# draw empty board
 		for string in reversed(self.get_strings()):
-			s = []
-			for fret in range(self.get_num_frets()):
-				s.append("-"*dashes_per_fret + "|")
+			global string_contains_root
+			string_contains_root = False
 
+			# draw empty frets
+			s = [ ("-"*dashes_per_fret + "|") for fret in range(self.get_num_frets()) ]
+
+			# occupy notes on frets
 			if isinstance(pattern, GuitarNote):	# display single note
 				s = draw_note_on_string(s, pattern, string)
-				s = "".join(s)
-				fb_str.append(s)
 			elif isinstance(pattern, Note):	# display note at every location it occurs
 				notes = string.find_note(pattern, self.get_num_frets())
 				s = draw_notes_on_string(s, notes, string)
-				s = "".join(s)
-				fb_str.append(s)
 			elif isinstance(pattern, list):		# display array of notes
 				if isinstance(pattern[0], GuitarNote):
-					s = draw_note_on_string(s, pattern, string)
-					s = "".join(s)
-					fb_str.append(s)
-		#elif isinstance(pattern, GuitarChord):
-		# 	TODO
-		#	pass
+					s = draw_notes_on_string(s, pattern, string)
+			#elif isinstance(pattern, GuitarChord):
+			# 	TODO
+			#	pass
 
-		# string label fretboard
-		string_header = ""
-		for i, string in enumerate(reversed(self.get_strings())):
-			string_header = str(string) + "--||"
-			fb_str[i] = string_header + fb_str[i]	# prepend string name
+			# prepend string label
+			string_header = str(string)
+			string_header += "-X||" if string_contains_root else "--||"
+			s.insert(0, string_header)
+
+			s = "".join(s)
+			fb_str.append(s)
+
 		fb_str = '\n'.join(fb_str)
 		
 		# add fret markers
@@ -143,7 +149,7 @@ class Fretboard:
 				else:
 					marker_str += " "*half_dashes + str(k) + " "*(dashes_per_fret-half_dashes)
 				k += 1
-				
+
 			return fb_str + "\n" + marker_str
 
 		return fb_str

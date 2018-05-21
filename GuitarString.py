@@ -28,3 +28,5 @@ class GuitarString:
 	def find_roots(self, num_frets):
 		""" Find root occurences on the string. """
 		return self.find_note(self.open, num_frets)
+
+		
