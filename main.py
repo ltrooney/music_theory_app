@@ -1,5 +1,8 @@
 from Note import Note
+from GuitarNote import GuitarNote
+from GuitarString import GuitarString
 from Menu import Menu
+from Fretboard import Fretboard
 import constants as c
 import re
 from curses import wrapper
@@ -45,7 +48,13 @@ def main(stdscr):
 		else:
 			menu.set_response("Invalid input.")
 
-wrapper(main)
+#wrapper(main)
+
+e_n = Note(c.NOTE_E)
+string = GuitarString(e_n, 21)
+n = GuitarNote(c.NOTE_E, c.TONE_NATURAL, string, 0)
+
+print string.get_notes()
 
 
 

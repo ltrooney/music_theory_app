@@ -2,7 +2,7 @@ import curses
 from curses import wrapper
 import constants as c
 
-class Menu():
+class Menu(object):
 	def __init__(self):
 		self.w = curses.initscr()
 		self.response = None

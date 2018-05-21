@@ -4,7 +4,7 @@ from GuitarString import GuitarString
 from GuitarNote import GuitarNote
 from math import floor
 
-class Fretboard:
+class Fretboard(object):
 	def __init__(self, strings=None, num_frets=None):
 		if strings is None:
 			e = Note(c.NOTE_E)
@@ -154,9 +154,10 @@ class Fretboard:
 
 		return fb_str
 
-
+'''
 e_n = Note(c.NOTE_E)
-string = GuitarString(e_n)
+string = GuitarString(e_n, 21)
 n = GuitarNote(c.NOTE_E, c.TONE_NATURAL, string, 3)
 f = Fretboard()
 print f.plot(e_n)
+'''

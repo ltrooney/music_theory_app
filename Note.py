@@ -1,6 +1,6 @@
 import constants as c
 
-class Note:
+class Note(object):
 	def __init__(self, name, accidental=None):
 		self.name = name
 		if accidental is None:
@@ -9,6 +9,9 @@ class Note:
 			self.accidental = accidental
 
 	def __str__(self):
+		return self.get_note_name()
+
+	def get_note_name(self):
 		return self.get_name() + self.get_accidental()
 
 	def get_name(self):
