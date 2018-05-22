@@ -1,52 +1,18 @@
-import constants as c
 from Note import Note
-from GuitarString import GuitarString
 from GuitarNote import GuitarNote
 from math import floor
 
-class Fretboard(object):
-	def __init__(self, strings=None, num_frets=None):
-		if strings is None:
-			e = Note(c.NOTE_E)
-			a = Note(c.NOTE_A)
-			d = Note(c.NOTE_D)
-			g = Note(c.NOTE_G)
-			b = Note(c.NOTE_B)
-
-			strings = [
-				GuitarString(e), GuitarString(a), GuitarString(d),
-				GuitarString(g), GuitarString(b), GuitarString(e)
-			]
-		self.set_strings(strings)
-
-		if num_frets is None:
-			self.set_num_frets(21)
-		else:
-			self.set_num_frets(num_frets)
-
+class Renderer(object):
+	def __init__(self, fretboard):
+		self.set_fretboard(fretboard)
 		self.show_fret_markers()
 		self.set_num_dashes_per_fret(3)
 
-	def set_strings(self, strings):
-		""" Sets the tuning of the guitar. """
-		self.strings = strings
+	def set_fretboard(self, fretboard):
+		self.fretboard = fretboard
 
-	def get_strings(self):
-		return self.strings
-
-	def set_num_frets(self, num_frets):
-		self.num_frets = num_frets
-
-	def get_num_frets(self):
-		return self.num_frets
-
-	def get_roots(self, note):
-		""" Specifies on the fretboard the fret positions of the given note. """
-		roots = []
-		for string in self.get_strings():
-			s_root = string.find_note(note, self.get_num_frets())
-			roots.append(s_root)
-		return roots
+	def get_fretboard(self):
+		return self.fretboard
 
 	def show_fret_markers(self, val=True):
 		""" Choose whether or not the fret numbers will be displayed. """
@@ -69,20 +35,16 @@ class Fretboard(object):
 		return self.plot(pattern=None)
 
 	def plot(self, pattern=None):
-		string_contains_root = False
 		""" Returns an ascii art image of the specified notes on the fretboard. """
 		def draw_note_on_string(s, note, string):
 			p_string = note.get_string()
 			p_fret = note.get_fret()
-
-			if p_fret == 0:
-				global string_contains_root
-				string_contains_root = True
+			print p_fret
 
 			# fill in occupied frets
 			if str(p_string) == str(string):
 				half_dashes = int(floor(dashes_per_fret/2))
-				s[p_fret-1] = "-"*half_dashes + "X" + "-"*(dashes_per_fret-half_dashes-1) + "|"
+				s[p_fret] = "-"*half_dashes + "X" + "-"*(dashes_per_fret-half_dashes-1) + "|"
 			return s
 			
 		def draw_notes_on_string(s, notes, string):
@@ -99,31 +61,31 @@ class Fretboard(object):
 			self.set_num_dashes_per_fret(6)
 
 		# draw empty board
-		for string in reversed(self.get_strings()):
-			global string_contains_root
-			string_contains_root = False
-
+		fretboard = self.get_fretboard()
+		for string in reversed(fretboard.get_strings()):
 			# draw empty frets
-			s = [ ("-"*dashes_per_fret + "|") for fret in range(self.get_num_frets()) ]
+			s = [ ("-"*dashes_per_fret + "|") for fret in range(fretboard.get_num_frets()) ]
+
+			string_header = str(string)
 
 			# occupy notes on frets
 			if isinstance(pattern, GuitarNote):	# display single note
 				s = draw_note_on_string(s, pattern, string)
+				string_header += "-X||" if (pattern.get_fret() == 0 and pattern.get_string() == string) else "--||"
 			elif isinstance(pattern, Note):	# display note at every location it occurs
-				notes = string.find_note(pattern, self.get_num_frets())
+				notes = string.find_note(pattern)
 				s = draw_notes_on_string(s, notes, string)
+				string_header += "-X||" if string.get_open() in notes else "--||"
 			elif isinstance(pattern, list):		# display array of notes
-				if isinstance(pattern[0], GuitarNote):
+				if all(type(n) is GuitarNote for n in pattern):
 					s = draw_notes_on_string(s, pattern, string)
+					string_header += "-X||" if string.get_open() in pattern else "--||"
 			#elif isinstance(pattern, GuitarChord):
 			# 	TODO
 			#	pass
 
 			# prepend string label
-			string_header = str(string)
-			string_header += "-X||" if string_contains_root else "--||"
 			s.insert(0, string_header)
-
 			s = "".join(s)
 			fb_str.append(s)
 
@@ -136,7 +98,7 @@ class Fretboard(object):
 			i = 0
 			k = 1
 			for i, fret in enumerate(fret_markers):
-				if fret > self.get_num_frets():
+				if fret > fretboard.get_num_frets():
 					break
 
 				while k != fret:
@@ -153,11 +115,3 @@ class Fretboard(object):
 			return fb_str + "\n" + marker_str
 
 		return fb_str
-
-'''
-e_n = Note(c.NOTE_E)
-string = GuitarString(e_n, 21)
-n = GuitarNote(c.NOTE_E, c.TONE_NATURAL, string, 3)
-f = Fretboard()
-print f.plot(e_n)
-'''

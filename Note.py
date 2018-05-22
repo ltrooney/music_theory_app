@@ -20,6 +20,10 @@ class Note(object):
 	def get_accidental(self):
 		return self.accidental
 
+	def set_note_name(self, name, accidental):
+		self.set_name(name)
+		self.set_accidental(accidental)
+
 	def set_name(self, name):
 		self.name = name
 

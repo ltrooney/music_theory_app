@@ -1,13 +1,18 @@
 from Note import Note
 
 class GuitarNote(Note):
-	def __init__(self, name, accidental, string, fret):
-		Note.__init__(self, name, accidental)
+	def __init__(self, string, fret):
 		self.set_string(string)
 		self.set_fret(fret)
 
+		note = string.get_note_at_fret(fret)
+		Note.__init__(self, note.get_name(), note.get_accidental())
+
 	def __str__(self):
 		return Note.__str__(self) + " on " + str(self.get_string()) + "[" + str(self.get_fret()) + "]"
+
+	def __eq__(self, other):
+		return self.__dict__ == other.__dict__
 
 	def set_string(self, string):
 		self.string = string
@@ -28,7 +33,7 @@ class GuitarNote(Note):
 			return None
 
 		note = super(GuitarNote, self).up_half()
-		return GuitarNote(note.get_name(), note.get_accidental(), self.string, new_fret)
+		return GuitarNote(self.string, new_fret)
 
 	def up_whole(self):
 		""" Get the note up two semitones (whole step). """
@@ -44,7 +49,7 @@ class GuitarNote(Note):
 			return None
 
 		note = super(GuitarNote, self).down_half()
-		return GuitarNote(note.get_name(), note.get_accidental(), self.string, self.fret-1)
+		return GuitarNote(self.string, new_fret)
 
 	def down_whole(self):
 		""" Get the note down two semitones (whole step). """
@@ -56,4 +61,5 @@ class GuitarNote(Note):
 	def alt(self):
 		""" Turn flat note into relative sharp and vice versa. """
 		note = super(GuitarNote, self).alt()
-		return GuitarNote(note.get_name(), note.get_accidental(), self.string, self.fret)
+		self.set_note_name(note.get_note_name())
+		return self

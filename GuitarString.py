@@ -6,16 +6,17 @@ class GuitarString(object):
 		self.open = open
 		self.set_num_frets(num_frets)
 
+		note = open
 		self.notes = []
-		guitar_note = GuitarNote(open.get_name(), open.get_accidental(), self, 0)
-		self.notes.append(guitar_note)
-		for fret in range(1,num_frets+1):
-			note = guitar_note.up_half()
-			guitar_note = GuitarNote(note.get_name(), note.get_accidental(), self, fret)
-			self.notes.append(guitar_note)
+		for fret in range(num_frets+1):
+			self.notes.append(note)
+			note = note.up_half()
 
 	def __str__(self):
 		return str(self.get_open())
+
+	def __eq__(self, other):
+		return self.get_open().__dict__ == other.get_open().__dict__
 
 	def set_open(self, open):
 		""" Identify the string's open note value. """
@@ -33,6 +34,10 @@ class GuitarString(object):
 		""" Get the number of frets on the string. """
 		return self.num_frets
 
+	def get_note_at_fret(self, fret):
+		""" Get the note at the specified fret on the string. """
+		return self.get_notes()[fret]
+
 	def get_notes(self):
 		""" Get the notes at each fret on the string. """
 		return self.notes
@@ -42,7 +47,7 @@ class GuitarString(object):
 		matches = []
 		for fret, n in enumerate(self.get_notes()):
 			if n.get_note_name() == note.get_note_name():
-				fb_note = GuitarNote(n.get_name(), n.get_accidental(), self, fret)
+				fb_note = GuitarNote(self, fret)
 				matches.append(fb_note)
 		return matches
 

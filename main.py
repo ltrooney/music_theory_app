@@ -1,8 +1,9 @@
 from Note import Note
 from GuitarNote import GuitarNote
 from GuitarString import GuitarString
+from GuitarFretboard import GuitarFretboard
 from Menu import Menu
-from Fretboard import Fretboard
+from Renderer import Renderer
 import constants as c
 import re
 from curses import wrapper
@@ -52,9 +53,10 @@ def main(stdscr):
 
 e_n = Note(c.NOTE_E)
 string = GuitarString(e_n, 21)
-n = GuitarNote(c.NOTE_E, c.TONE_NATURAL, string, 0)
-
-print string.get_notes()
+n = GuitarNote(string, 0)
+f = GuitarFretboard()
+r = Renderer(f)
+print r.plot(n)
 
 
 
