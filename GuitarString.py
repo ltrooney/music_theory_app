@@ -15,8 +15,8 @@ class GuitarString(object):
 	def __str__(self):
 		return str(self.get_open())
 
-	def __eq__(self, other):
-		return self.get_open().__dict__ == other.get_open().__dict__
+	def __cmp__(self, other):
+		return str(self) != str(other)
 
 	def set_open(self, open):
 		""" Identify the string's open note value. """

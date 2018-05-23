@@ -52,8 +52,8 @@ def main(stdscr):
 #wrapper(main)
 
 e_n = Note(c.NOTE_E)
-string = GuitarString(e_n, 21)
-n = GuitarNote(string, 0)
+s = GuitarString(open=e_n)
+n = GuitarNote(string=s, fret=4)
 f = GuitarFretboard()
 r = Renderer(f)
 print r.plot(n)
