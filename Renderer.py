@@ -45,13 +45,22 @@ class Renderer(object):
 		dashes_per_fret = self.get_num_dashes_per_fret()
 		
 		def draw_note_on_string(s, note, string):
-			# exit if note is on another string
-			if note.get_string() != string:
-				return s
-			# fill in occupied frets
-			half_dashes = int(floor(dashes_per_fret/2))
-			fret = note.get_fret()
-			s[fret] = "-X||" if fret == 0 else "-"*half_dashes + "X" + "-"*(dashes_per_fret-half_dashes-1) + "|"
+			# if GuitarNote ...
+			if isinstance(note, GuitarNote):	
+				note_buf = [note]	# display single note
+			elif isinstance(note, Note):
+				note_buf = string.find_note(note)	# display note at every location it occurs
+			else:
+				raise ValueError("input 'note' must be of instance Note or [Note]")
+
+			for n in note_buf:
+				# skip note if on another string
+				if n.get_string() != string:
+					continue
+				# fill in occupied frets
+				half_dashes = int(floor(dashes_per_fret/2))
+				fret = n.get_fret()
+				s[fret] = "-X||" if fret == 0 else "-"*half_dashes + "X" + "-"*(dashes_per_fret-half_dashes-1) + "|"
 			return s
 
 		# draw empty board
@@ -60,18 +69,12 @@ class Renderer(object):
 		for string in reversed(fretboard.get_strings()):
 			# draw empty frets, treating root as special case
 			s = [ "--||" if fret == 0 else "-"*dashes_per_fret + "|" for fret in range(fretboard.get_num_frets()+1) ]
-
-			# occupy notes on frets
-			if isinstance(pattern, GuitarNote):	# display single note
-				s = draw_note_on_string(s, pattern, string)
-			elif isinstance(pattern, Note):	# display note at every location it occurs
-				notes = string.find_note(pattern)
-				for note in notes:
+			
+			if isinstance(pattern, list):		# display array of notes
+				for note in pattern:
 					s = draw_note_on_string(s, note, string)
-			elif isinstance(pattern, list):		# display array of notes
-				if all(type(n) is GuitarNote for n in pattern):
-					for note in pattern:
-						s = draw_note_on_string(s, note, string)
+			else:
+				s = draw_note_on_string(s, pattern, string)
 			#elif isinstance(pattern, GuitarChord):
 			# 	TODO
 			#	pass

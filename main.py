@@ -53,10 +53,11 @@ def main(stdscr):
 
 e_n = Note(c.NOTE_E)
 s = GuitarString(open=e_n)
-n = GuitarNote(string=s, fret=4)
+n = GuitarNote(string=s, fret=0)
 f = GuitarFretboard()
 r = Renderer(f)
-print r.plot(n)
-
+#print r.plot(n.get_roots())
+notes = n.interval(0, f) + n.interval(c.INTVL_MAJ_2, f) + n.interval(c.INTVL_MAJ_3, f) + n.interval(c.INTVL_PER_5, f) + n.interval(c.INTVL_MAJ_6, f)
+print r.plot(notes)
 
 

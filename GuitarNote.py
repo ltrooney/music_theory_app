@@ -61,5 +61,16 @@ class GuitarNote(Note):
 	def alt(self):
 		""" Turn flat note into relative sharp and vice versa. """
 		note = super(GuitarNote, self).alt()
-		self.set_note_name(note.get_note_name())
-		return self
+		return GuitarNote(note.get_note_name(), self.get_string())
+	
+	def interval(self, interval, fretboard=None):
+		""" Get the note at a distance specified by the interval. """
+		note = super(GuitarNote, self).interval(interval)
+		if fretboard == None:
+			return note
+		# get all instances of interval on the fretboard
+		notes = []
+		for note_group in fretboard.get_roots(note):
+			notes += [ note for note in note_group ]
+		return notes
+
