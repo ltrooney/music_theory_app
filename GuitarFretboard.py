@@ -40,5 +40,8 @@ class GuitarFretboard(object):
 
 	def get_notes(self):
 		""" Get every note on the fretboard. """
-		return [ string.get_notes() for string in self.get_strings() ]
+		ret = []
+		for string in self.get_strings():
+			ret += string.get_notes()
+		return ret
 

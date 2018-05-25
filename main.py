@@ -53,15 +53,12 @@ def main(stdscr):
 
 #wrapper(main)
 
-e_n = Note(c.NOTE_E)
-s = GuitarString(open=e_n)
-n = GuitarNote(string=s, fret=0)
+note_e = Note(c.NOTE_E)
+note_f = note_e.up_half()
 f = GuitarFretboard()
 r = Renderer(f)
-#notes = n.interval(0, f) + n.interval(c.INTVL_MAJ_2, f) + n.interval(c.INTVL_MAJ_3, f) + n.interval(c.INTVL_PER_5, f) + n.interval(c.INTVL_MAJ_6, f)
-#print r.plot(notes)
-e_maj = GuitarChord(n, c.CHORD_MAJ)
-e_min = GuitarChord(n ,c.CHORD_MIN)
-print r.plot(e_min)
+r.display_intervals()
+r.set_num_dashes_per_fret(5)
+print r.plot(f.get_notes())
 
 

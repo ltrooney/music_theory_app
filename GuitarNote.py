@@ -1,12 +1,13 @@
 from Note import Note
+import constants as c
 
 class GuitarNote(Note):
-	def __init__(self, string, fret):
+	def __init__(self, string, fret, interval=c.INTVL_ROOT):
 		self.set_string(string)
 		self.set_fret(fret)
 
 		note = string.get_note_at_fret(fret)
-		Note.__init__(self, note.get_name(), note.get_accidental())
+		Note.__init__(self, note.get_name(), note.get_accidental(), interval)
 
 	def __str__(self):
 		return Note.__str__(self) + " on " + str(self.get_string()) + "[" + str(self.get_fret()) + "]"
@@ -63,7 +64,7 @@ class GuitarNote(Note):
 		note = super(GuitarNote, self).alt()
 		return GuitarNote(note.get_note_name(), self.get_string())
 	
-	def interval(self, interval, fretboard=None):
+	def get_note_at_interval(self, interval, fretboard=None):
 		""" Get the note at a distance specified by the interval. """
 		note = super(GuitarNote, self).interval(interval)
 		if fretboard == None:

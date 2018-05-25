@@ -1,7 +1,7 @@
 from Note import Note
 from GuitarNote import GuitarNote
 from GuitarChord import GuitarChord
-from math import floor
+from math import floor, ceil
 import constants as c
 
 class Renderer(object):
@@ -9,7 +9,7 @@ class Renderer(object):
 		self.set_fretboard(fretboard)
 		self.show_fret_markers()
 		self.set_num_dashes_per_fret(3)
-		self.display_interval(False)
+		self.display_intervals(False)
 		self.display_note_name(False)
 
 	def set_fretboard(self, fretboard):
@@ -39,13 +39,13 @@ class Renderer(object):
 		""" The number of dashes that appear in a fret when plotted. """
 		return self.num_dashes_per_fret
 
-	def display_interval(self, val=True):
+	def display_intervals(self, val=True):
 		""" Determines whether to show the interval number on the fretboard. """
-		self.display_interval = val
+		self.show_intervals = val
 
 	def display_note_name(self, val=True):
 		""" Determines wheter to show the note name on the fretboard. """
-		self.display_note_name = val
+		self.show_note_name = val
 
 	def plot_empty(self):
 		""" Returns an ascii art image of an empty fretboard. """
@@ -53,9 +53,20 @@ class Renderer(object):
 
 	def plot(self, pattern=None):
 		""" Returns an ascii art image of the specified notes on the fretboard. """
-		
 		dashes_per_fret = self.get_num_dashes_per_fret()
-		
+
+		def get_fret_pattern(note):
+			content = ""
+			if self.show_note_name:
+				content = note.get_note_name()
+			elif self.show_intervals:
+				content = c.INTVL_DICT[note.get_interval()]
+			else:
+				content = "X"
+			root_fret_pattern = "*"*(2-len(content)) + content + "||"
+			dashes_buffer = float(dashes_per_fret - len(content))
+			return root_fret_pattern if note.get_fret() == 0 else "-"*int(ceil(dashes_buffer/2)) + content + "-"*int(floor(dashes_buffer/2)) + "|"
+		 
 		def draw_note_on_string(s, note, string):
 			# if GuitarNote ...
 			if type(note) is GuitarNote:	
@@ -72,9 +83,7 @@ class Renderer(object):
 				if n.get_string() != string:
 					continue
 				# fill in occupied frets
-				half_dashes = int(floor(dashes_per_fret/2))
-				fret = n.get_fret()
-				s[fret] = "-X||" if fret == 0 else "-"*half_dashes + "X" + "-"*(dashes_per_fret-half_dashes-1) + "|"
+				s[n.get_fret()] = get_fret_pattern(n)
 			return s
 
 		# draw empty board
@@ -89,9 +98,6 @@ class Renderer(object):
 					s = draw_note_on_string(s, note, string)
 			else:
 				s = draw_note_on_string(s, pattern, string)
-			#elif isinstance(pattern, GuitarChord):
-			# 	TODO
-			#	pass
 
 			# prepend string label
 			s.insert(0, str(string))

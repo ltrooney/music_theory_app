@@ -47,7 +47,7 @@ class GuitarString(object):
 		matches = []
 		for fret, n in enumerate(self.get_notes()):
 			if n.get_note_name() == note.get_note_name():
-				fb_note = GuitarNote(self, fret)
+				fb_note = GuitarNote(self, fret, note.get_interval())
 				matches.append(fb_note)
 		return matches
 

@@ -1,12 +1,10 @@
 import constants as c
 
 class Note(object):
-	def __init__(self, name, accidental=None):
-		self.name = name
-		if accidental is None:
-			self.accidental = c.TONE_NATURAL
-		else:
-			self.accidental = accidental
+	def __init__(self, name, accidental=c.TONE_NATURAL, interval=c.INTVL_ROOT):
+		self.set_name(name)
+		self.set_accidental(accidental)
+		self.set_interval(interval)
 
 	def __str__(self):
 		return self.get_note_name()
@@ -30,17 +28,25 @@ class Note(object):
 	def set_accidental(self, accidental):
 		self.accidental = accidental
 
+	def set_interval(self, interval):
+		""" Sets the interval of this note relative to a root note. """
+		self.interval = interval
+
+	def get_interval(self):
+		return self.interval
+
 	def up_half(self):
 		""" Get the note up one semitone (half step)."""
+		new_interval = (self.get_interval() + c.INTVL_MIN_2) % c.INTVL_OCTAVE
 		if self.name == c.NOTE_B:
-			return Note(c.NOTE_C, c.TONE_NATURAL)
+			return Note(c.NOTE_C, c.TONE_NATURAL, new_interval)
 		elif self.name == c.NOTE_E:
-			return Note(c.NOTE_F, c.TONE_NATURAL)
+			return Note(c.NOTE_F, c.TONE_NATURAL, new_interval)
 		elif self.accidental == c.TONE_NATURAL:
-			return Note(self.name, c.TONE_SHARP)
+			return Note(self.name, c.TONE_SHARP, new_interval)
 
 		i = c.NOTES.index(self.name)
-		return Note(c.NOTES[(i+1) % 7], c.TONE_NATURAL)
+		return Note(c.NOTES[(i+1) % 7], accidental=c.TONE_NATURAL, interval=new_interval)
 
 	def up_whole(self):
 		""" Get the note up two semitones (whole step). """
@@ -48,15 +54,16 @@ class Note(object):
 
 	def down_half(self):
 		""" Get the note down one semitone (half step). """
+		new_interval = (self.get_interval() - c.INTVL_MIN_2) % c.INTVL_OCTAVE
 		if self.name == c.NOTE_C:
-			return Note(c.NOTE_B, c.TONE_NATURAL)
+			return Note(c.NOTE_B, c.TONE_NATURAL, new_interval)
 		elif self.name == c.NOTE_F:
-			return Note(c.NOTE_E, c.TONE_NATURAL)
+			return Note(c.NOTE_E, c.TONE_NATURAL, new_interval)
 		elif self.accidental == c.TONE_NATURAL:
-			return Note(self.name, c.TONE_FLAT)
+			return Note(self.name, c.TONE_FLAT, new_interval)
 
 		i = c.NOTES.index(self.name)
-		return Note(c.NOTES[(i-1) % 7], c.TONE_NATURAL)
+		return Note(c.NOTES[(i-1) % 7], accidental=c.TONE_NATURAL, interval=new_interval)
 
 	def down_whole(self):
 		""" Get the note down two semitones (whole step). """
@@ -74,7 +81,7 @@ class Note(object):
 			return n
 		return self
 
-	def interval(self, interval):
+	def get_note_at_interval(self, interval):
 		""" Get the note at a distance specified by the interval. """
 		n = self
 		for i in xrange(interval):
