@@ -1,6 +1,8 @@
 from Note import Note
+from Chord import Chord
 from GuitarNote import GuitarNote
 from GuitarString import GuitarString
+from GuitarChord import GuitarChord
 from GuitarFretboard import GuitarFretboard
 from Menu import Menu
 from Renderer import Renderer
@@ -53,11 +55,13 @@ def main(stdscr):
 
 e_n = Note(c.NOTE_E)
 s = GuitarString(open=e_n)
-n = GuitarNote(string=s, fret=2)
+n = GuitarNote(string=s, fret=0)
 f = GuitarFretboard()
 r = Renderer(f)
-#print r.plot(n.get_roots())
-notes = n.interval(0, f) + n.interval(c.INTVL_MAJ_2, f) + n.interval(c.INTVL_MAJ_3, f) + n.interval(c.INTVL_PER_5, f) + n.interval(c.INTVL_MAJ_6, f)
-print r.plot(notes)
+#notes = n.interval(0, f) + n.interval(c.INTVL_MAJ_2, f) + n.interval(c.INTVL_MAJ_3, f) + n.interval(c.INTVL_PER_5, f) + n.interval(c.INTVL_MAJ_6, f)
+#print r.plot(notes)
+e_maj = GuitarChord(n, c.CHORD_MAJ)
+e_min = GuitarChord(n ,c.CHORD_MIN)
+print r.plot(e_min)
 
 

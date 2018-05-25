@@ -33,7 +33,10 @@ class GuitarFretboard(object):
 
 	def get_roots(self, note):
 		""" Specifies on the fretboard the fret positions of the given note. """
-		return [ string.find_note(note) for string in self.get_strings() ]
+		ret = []
+		for string in self.get_strings():
+			ret += string.find_note(note)
+		return ret
 
 	def get_notes(self):
 		""" Get every note on the fretboard. """

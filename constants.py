@@ -22,6 +22,7 @@ TONALITY_MAJOR = 0
 TONALITY_MINOR = 1
 
 ''' Intervals '''
+INTVL_ROOT	= 0
 INTVL_MIN_2 = 1
 INTVL_MAJ_2 = 2
 INTVL_MIN_3 = 3
@@ -40,6 +41,28 @@ INTVL_AUG_9	= 15
 INTVL_MAJ_11 = 17
 INTVL_AUG_11 = 18
 INTVL_MAJ_13 = 21
+
+INTVL_DICT = {
+	INTVL_ROOT	: "R",
+	INTVL_MIN_2 : "b2",
+	INTVL_MAJ_2 : "2",
+	INTVL_MIN_3 : "b3",
+	INTVL_MAJ_3 : "3",
+	INTVL_PER_4 : "4",
+	INTVL_AUG_4 : "#4",
+	INTVL_DIM_5 : "b5",
+	INTVL_PER_5 : "5",
+	INTVL_AUG_5 : "#5",
+	INTVL_MIN_6 : "b6",
+	INTVL_MAJ_6 : "6",
+	INTVL_MIN_7 : "b7",
+	INTVL_MAJ_7 : "7",
+	INTVL_MAJ_9	: "9",
+	INTVL_AUG_9	: "#9",
+	INTVL_MAJ_11 : "11",
+	INTVL_AUG_11 : "#11",
+	INTVL_MAJ_13 : "13"
+}
 
 ''' Chords '''
 # simple chords

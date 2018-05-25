@@ -69,8 +69,5 @@ class GuitarNote(Note):
 		if fretboard == None:
 			return note
 		# get all instances of interval on the fretboard
-		notes = []
-		for note_group in fretboard.get_roots(note):
-			notes += [ note for note in note_group ]
-		return notes
+		return fretboard.get_roots(note)
 

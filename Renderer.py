@@ -1,12 +1,16 @@
 from Note import Note
 from GuitarNote import GuitarNote
+from GuitarChord import GuitarChord
 from math import floor
+import constants as c
 
 class Renderer(object):
 	def __init__(self, fretboard):
 		self.set_fretboard(fretboard)
 		self.show_fret_markers()
 		self.set_num_dashes_per_fret(3)
+		self.display_interval(False)
+		self.display_note_name(False)
 
 	def set_fretboard(self, fretboard):
 		self.fretboard = fretboard
@@ -35,6 +39,14 @@ class Renderer(object):
 		""" The number of dashes that appear in a fret when plotted. """
 		return self.num_dashes_per_fret
 
+	def display_interval(self, val=True):
+		""" Determines whether to show the interval number on the fretboard. """
+		self.display_interval = val
+
+	def display_note_name(self, val=True):
+		""" Determines wheter to show the note name on the fretboard. """
+		self.display_note_name = val
+
 	def plot_empty(self):
 		""" Returns an ascii art image of an empty fretboard. """
 		return self.plot(pattern=None)
@@ -46,10 +58,12 @@ class Renderer(object):
 		
 		def draw_note_on_string(s, note, string):
 			# if GuitarNote ...
-			if isinstance(note, GuitarNote):	
+			if type(note) is GuitarNote:	
 				note_buf = [note]	# display single note
-			elif isinstance(note, Note):
-				note_buf = string.find_note(note)	# display note at every location it occurs
+			elif type(note) is Note:
+				note_buf = string.find_note(note)  # display note at every location it occurs
+			elif type(note) is GuitarChord:
+				note_buf = note.get_notes()	# display chord
 			else:
 				raise ValueError("input 'note' must be of instance Note or [Note]")
 

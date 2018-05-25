@@ -51,7 +51,7 @@ class GuitarString(object):
 				matches.append(fb_note)
 		return matches
 
-	def find_roots(self, num_frets):
+	def find_roots(self):
 		""" Find root occurences on the string. """
-		return self.find_note(self.open, num_frets)
+		return self.find_note(self.get_open())
 
