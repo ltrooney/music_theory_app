@@ -53,7 +53,7 @@ def main(stdscr):
 
 e_n = Note(c.NOTE_E)
 s = GuitarString(open=e_n)
-n = GuitarNote(string=s, fret=0)
+n = GuitarNote(string=s, fret=2)
 f = GuitarFretboard()
 r = Renderer(f)
 #print r.plot(n.get_roots())
