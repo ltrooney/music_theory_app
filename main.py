@@ -1,5 +1,6 @@
 from Note import Note
 from Chord import Chord
+from Key import Key
 from GuitarNote import GuitarNote
 from GuitarString import GuitarString
 from GuitarChord import GuitarChord
@@ -30,7 +31,7 @@ def parse_note(note_str):
 def main(stdscr):
 	menu = Menu(stdscr)
 	response = None
-	key = Key(Note(c.NOTE_C), c.TONALITY_MAJOR)
+	key = Key(Note(c.NOTE_C))
 	menu.set_response("Current key: " + key.get_tonic().get_note_name() + " major")
 
 	while True:
@@ -49,9 +50,13 @@ def main(stdscr):
 				menu.set_response(new_root_str + " is not a valid key!")
 			else:
 				root = Note(note_str[0], note_str[1])
-				menu.set_response("Key updated! New key is " + root.get_note_name() + " major")
+				key.set_tonic(root)
+				menu.set_response("Key updated! New key is " + str(key))
 		elif option == c.OPTN_GET_NOTES_IN_KEY:
-			pass
+			s = ""
+			for n in key.get_notes():
+				s += str(n) + " "
+			menu.set_response(s)
 		elif option == c.OPTN_GET_CHORDS_IN_KEY:
 			pass
 		elif option == c.OPTN_GET_INTERVALS:
@@ -70,12 +75,4 @@ def main(stdscr):
 		menu.refresh()
 
 wrapper(main)
-'''
-note_f = Note(c.NOTE_A)
-c = GuitarChord(note_f, c.CHORD_MAJ_7)
-r = Renderer()
-r.display_intervals()
-r.set_num_dashes_per_fret(4)
-print r.plot(c)
-'''
 

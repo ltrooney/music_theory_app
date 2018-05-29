@@ -38,36 +38,48 @@ class Note(object):
 	def up_half(self):
 		""" Get the note up one semitone (half step)."""
 		new_interval = (self.get_interval() + c.INTVL_MIN_2) % c.INTVL_OCTAVE
-		if self.name == c.NOTE_B:
-			return Note(c.NOTE_C, c.TONE_NATURAL, new_interval)
-		elif self.name == c.NOTE_E:
-			return Note(c.NOTE_F, c.TONE_NATURAL, new_interval)
-		elif self.accidental == c.TONE_NATURAL:
-			return Note(self.name, c.TONE_SHARP, new_interval)
+		new_note = None
+		if self.get_note_name() == c.NOTE_B:	# B -> C
+			new_note = Note(c.NOTE_C, c.TONE_NATURAL, new_interval)
+		elif self.get_note_name() == c.NOTE_E:	# E -> F
+			new_note = Note(c.NOTE_F, c.TONE_NATURAL, new_interval)
+		elif self.get_accidental() == c.TONE_NATURAL:	# natural -> sharp
+			new_note = Note(self.get_name(), c.TONE_SHARP, new_interval)
+		elif self.get_accidental() == c.TONE_FLAT:	# flat -> natural
+			new_note = Note(self.get_name(), c.TONE_NATURAL, new_interval)
+		else:	# sharp -> natural (note above)
+			i = c.NOTES.index(self.get_name())
+			new_note = Note(c.NOTES[(i+1) % 7], accidental=c.TONE_NATURAL, interval=new_interval)
 
-		i = c.NOTES.index(self.name)
-		return Note(c.NOTES[(i+1) % 7], accidental=c.TONE_NATURAL, interval=new_interval)
-
+		return new_note.alt() if new_note.get_name() == self.get_name() else new_note
+			
 	def up_whole(self):
 		""" Get the note up two semitones (whole step). """
-		return self.up_half().up_half()
+		whole = self.up_half().up_half()
+		return whole if self.get_accidental() == c.TONE_FLAT else whole.alt()
 
 	def down_half(self):
 		""" Get the note down one semitone (half step). """
 		new_interval = (self.get_interval() - c.INTVL_MIN_2) % c.INTVL_OCTAVE
-		if self.name == c.NOTE_C:
-			return Note(c.NOTE_B, c.TONE_NATURAL, new_interval)
-		elif self.name == c.NOTE_F:
-			return Note(c.NOTE_E, c.TONE_NATURAL, new_interval)
-		elif self.accidental == c.TONE_NATURAL:
-			return Note(self.name, c.TONE_FLAT, new_interval)
+		new_note = None
+		if self.get_note_name() == c.NOTE_C:	# C -> B
+			new_note =  Note(c.NOTE_B, c.TONE_NATURAL, new_interval)
+		elif self.get_note_name() == c.NOTE_F:	# F -> E
+			new_note =  Note(c.NOTE_E, c.TONE_NATURAL, new_interval)
+		elif self.get_accidental() == c.TONE_NATURAL:	# natural -> flat
+			new_note =  Note(self.get_name(), c.TONE_FLAT, new_interval)
+		elif self.get_accidental() == c.TONE_SHARP:
+			new_note =  Note(self.get_name(), c.TONE_NATURAL, new_interval)
+		else:	# flat -> natural (note below)
+			i = c.NOTES.index(self.get_name())
+			new_note =  Note(c.NOTES[(i-1) % 7], accidental=c.TONE_NATURAL, interval=new_interval)
 
-		i = c.NOTES.index(self.name)
-		return Note(c.NOTES[(i-1) % 7], accidental=c.TONE_NATURAL, interval=new_interval)
+		return new_note.alt() if new_note.get_name() == self.get_name() else new_note
 
 	def down_whole(self):
 		""" Get the note down two semitones (whole step). """
-		return self.down_half().down_half()
+		whole = self.down_half().down_half()
+		return whole if self.get_accidental() == c.TONE_FLAT else whole.alt()
 
 	def alt(self):
 		""" Turn flat note into relative sharp and vice versa. """
