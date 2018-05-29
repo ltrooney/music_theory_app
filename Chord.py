@@ -4,7 +4,7 @@ class Chord(object):
 		self.type = intervals
 			
 		self.notes = [ root ]
-		self.notes += [ root.interval(interval) for interval in intervals ]
+		self.notes += [ root.get_note_at_interval(interval) for interval in intervals ]
 
 	def get_notes(self):
 		return self.notes

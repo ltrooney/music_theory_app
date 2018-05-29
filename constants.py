@@ -14,12 +14,14 @@ NOTES = [
 
 ''' Accidentals '''
 TONE_FLAT = "b"
+TONE_DOUBLE_FLAT = "bb"
 TONE_SHARP = "#"
+TONE_DOUBLE_SHARP = "##"
 TONE_NATURAL = ""
 
 ''' Tonalities '''
-TONALITY_MAJOR = 0
-TONALITY_MINOR = 1
+TONALITY_MAJOR = "major"
+TONALITY_MINOR = "minor"
 
 ''' Intervals '''
 INTVL_ROOT	= 0
@@ -100,9 +102,24 @@ CHORD_MAJ_13 = CHORD_MAJ_9 + [ INTVL_MAJ_13 ]
 CHORD_MIN_13 = CHORD_MIN_11 + [ INTVL_MAJ_13 ]
 
 ''' Menu options '''
-OPTN_EXIT = 0
-OPTN_CHOOSE_ROOT = 1
-OPTN_SHOW_ROOTS = 2 
-OPTN_CALC_INTVL = 3
-OPTN_GET_NOTES = 4
-OPTN_GET_CHORDS = 5
+OPTN_EXIT 				= 0
+OPTN_CHOOSE_ROOT 		= 1
+OPTN_GET_NOTES_IN_KEY 	= 2
+OPTN_GET_CHORDS_IN_KEY 	= 3
+OPTN_GET_INTERVALS		= 4
+OPTN_DISPLAY_ROOTS		= 5
+OPTN_DISPLAY_NOTES_IN_KEY = 6
+OPTN_DISPLAY_CHORD		= 7
+OPTN_DISPLAY_SCALE		= 8
+
+MAIN_MENU_DICT = {
+	OPTN_CHOOSE_ROOT : "Set key",
+	OPTN_GET_NOTES_IN_KEY : "Get notes in key",
+	OPTN_GET_CHORDS_IN_KEY : "Get chords in key",
+	OPTN_GET_INTERVALS : "Get intervals of root",
+	OPTN_DISPLAY_ROOTS : "Display root positions",
+	OPTN_DISPLAY_NOTES_IN_KEY : "Display notes in key on instrument",
+	OPTN_DISPLAY_CHORD : "Display chord on instrument",
+	OPTN_DISPLAY_SCALE : "Display scale on instrument",
+	OPTN_EXIT : "Exit"
+}

@@ -10,9 +10,6 @@ import constants as c
 import re
 from curses import wrapper
 
-response = None
-root = Note(c.NOTE_C, c.TONE_NATURAL)
-
 def parse_note(note_str):
 	""" Parse the input to determine the note and the accidental. 
 	- parse_note("A") -> "A", None
@@ -25,40 +22,60 @@ def parse_note(note_str):
 	note_str = " ".join(note_str.split())	# remove duplicate whitespace
 	# TODO: don't match if '-' not followed by accidental
 	m = re.search('(A|B|C|D|E|F|G){1}(-| |)(b|flat|#|sharp){0,2}', note_str)
-	return m.group(0)
+	if m is None:
+		return
+	match_str = m.group(0)
+	return match_str[0], match_str[1:]
 
 def main(stdscr):
 	menu = Menu(stdscr)
+	response = None
+	key = Key(Note(c.NOTE_C), c.TONALITY_MAJOR)
+	menu.set_response("Current key: " + key.get_tonic().get_note_name() + " major")
 
 	while True:
-		menu.display()
+		menu.display(c.MAIN_MENU_DICT)
 		
-		menu.printstr("Choose: ")
+		menu.printstr("Pick an option: ")
 		option = int(menu.read_input())
-
-		menu.refresh()
 
 		if option == c.OPTN_EXIT:
 			break
 		elif option == c.OPTN_CHOOSE_ROOT:
 			menu.printstr("New root: ")
 			new_root_str = menu.read_input()
-
-			menu.set_response(parse_note(new_root_str))
-
-			# TODO
-
+			note_str = parse_note(new_root_str)
+			if note_str is None:
+				menu.set_response(new_root_str + " is not a valid key!")
+			else:
+				root = Note(note_str[0], note_str[1])
+				menu.set_response("Key updated! New key is " + root.get_note_name() + " major")
+		elif option == c.OPTN_GET_NOTES_IN_KEY:
+			pass
+		elif option == c.OPTN_GET_CHORDS_IN_KEY:
+			pass
+		elif option == c.OPTN_GET_INTERVALS:
+			pass
+		elif option == c.OPTN_DISPLAY_ROOTS:
+			print r.plot(note)
+		elif option == c.OPTN_DISPLAY_NOTES_IN_KEY:
+			pass
+		elif option == c.OPTN_DISPLAY_CHORD:
+			pass
+		elif option == c.OPTN_DISPLAY_SCALE:
+			pass
 		else:
 			menu.set_response("Invalid input.")
 
-#wrapper(main)
+		menu.refresh()
 
-note_e = Note(c.NOTE_E)
-note_f = note_e.up_half()
-f = GuitarFretboard()
-r = Renderer(f)
+wrapper(main)
+'''
+note_f = Note(c.NOTE_A)
+c = GuitarChord(note_f, c.CHORD_MAJ_7)
+r = Renderer()
 r.display_intervals()
-r.set_num_dashes_per_fret(5)
-print r.plot(f.get_notes())
-
+r.set_num_dashes_per_fret(4)
+print r.plot(c)
+'''
 

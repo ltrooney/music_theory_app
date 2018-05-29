@@ -1,11 +1,12 @@
 from Note import Note
 from GuitarNote import GuitarNote
 from GuitarChord import GuitarChord
+from GuitarFretboard import GuitarFretboard
 from math import floor, ceil
 import constants as c
 
 class Renderer(object):
-	def __init__(self, fretboard):
+	def __init__(self, fretboard=GuitarFretboard()):
 		self.set_fretboard(fretboard)
 		self.show_fret_markers()
 		self.set_num_dashes_per_fret(3)
