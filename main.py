@@ -32,7 +32,7 @@ def main(stdscr):
 	menu = Menu(stdscr)
 	response = None
 	key = Key(Note(c.NOTE_C))
-	menu.set_response("Current key: " + key.get_tonic().get_note_name() + " major")
+	menu.set_response("Current key: " + str(key))
 
 	while True:
 		menu.display(c.MAIN_MENU_DICT)
@@ -42,15 +42,22 @@ def main(stdscr):
 
 		if option == c.OPTN_EXIT:
 			break
-		elif option == c.OPTN_CHOOSE_ROOT:
-			menu.printstr("New root: ")
-			new_root_str = menu.read_input()
-			note_str = parse_note(new_root_str)
+		elif option == c.OPTN_CHOOSE_KEY:
+			menu.printstr("New key: ")
+			new_key_str = menu.read_input()
+			note_str = parse_note(new_key_str)
 			if note_str is None:
-				menu.set_response(new_root_str + " is not a valid key!")
+				menu.set_response(new_key_str + " is not a valid key!")
 			else:
 				root = Note(note_str[0], note_str[1])
 				key.set_tonic(root)
+
+				# check if key is minor
+				if ("minor" in new_key_str) or ("min" in new_key_str):
+					key.set_tonality(c.TONALITY_MINOR)
+				else:
+					key.set_tonality(c.TONALITY_MAJOR)
+
 				menu.set_response("Key updated! New key is " + str(key))
 		elif option == c.OPTN_GET_NOTES_IN_KEY:
 			s = ""
@@ -58,7 +65,10 @@ def main(stdscr):
 				s += str(n) + " "
 			menu.set_response(s)
 		elif option == c.OPTN_GET_CHORDS_IN_KEY:
-			pass
+			s = ""
+			for chord in key.get_chords():
+				s += str(chord) + " "
+			menu.set_response(s)
 		elif option == c.OPTN_GET_INTERVALS:
 			pass
 		elif option == c.OPTN_DISPLAY_ROOTS:

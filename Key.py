@@ -1,7 +1,8 @@
-import constants as c
+from constants import TONALITY_MAJOR, TONALITY_MINOR, CHORD_MIN, CHORD_DIM
+from Chord import Chord
 
 class Key(object):
-	def __init__(self, tonic, tonality=c.TONALITY_MAJOR):
+	def __init__(self, tonic, tonality=TONALITY_MAJOR):
 		self.set_tonic(tonic)
 		self.set_tonality(tonality)
 
@@ -18,6 +19,8 @@ class Key(object):
 
 	def set_tonality(self, tonality):
 		""" Set whether the key is major or minor. """
+		if tonality != TONALITY_MAJOR and tonality != TONALITY_MINOR:
+			raise ValueError("tonality must be 'major' or 'minor'")
 		self.tonality = tonality
 
 	def get_tonality(self):
@@ -29,7 +32,7 @@ class Key(object):
 		scale_note = self.get_tonic()
 		notes = [ scale_note ]
 
-		if self.get_tonality() == c.TONALITY_MAJOR:
+		if self.get_tonality() == TONALITY_MAJOR:
 			scale_note = scale_note.up_whole()
 			notes.append(scale_note)
 			scale_note = scale_note.up_whole()
@@ -44,7 +47,7 @@ class Key(object):
 			notes.append(scale_note)
 			scale_note = scale_note.up_half()
 			notes.append(scale_note)
-		elif self.get_tonality() == c.TONALITY_MINOR:
+		elif self.get_tonality() == TONALITY_MINOR:
 			scale_note = scale_note.up_whole()
 			notes.append(scale_note)
 			scale_note = scale_note.up_half()
@@ -59,8 +62,30 @@ class Key(object):
 			notes.append(scale_note)
 			scale_note = scale_note.up_whole()
 			notes.append(scale_note)
-		else:
-			pass
 
 		return notes
 		
+	def get_chords(self):
+		""" Get the chords in the key. """
+		notes = self.get_notes()
+		chords = [ Chord(n) for n in notes ]
+
+		if self.get_tonality() == TONALITY_MAJOR:
+			chords[1].set_chord_type(CHORD_MIN)
+			chords[2].set_chord_type(CHORD_MIN)
+			chords[5].set_chord_type(CHORD_MIN)
+			chords[6].set_chord_type(CHORD_DIM)
+		elif self.get_tonality() == TONALITY_MINOR:
+			chords[0].set_chord_type(CHORD_MIN)
+			chords[1].set_chord_type(CHORD_DIM)
+			chords[3].set_chord_type(CHORD_MIN)
+			chords[4].set_chord_type(CHORD_MIN)
+
+		return chords
+
+
+
+
+
+
+
