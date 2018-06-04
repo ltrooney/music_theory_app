@@ -83,6 +83,9 @@ class Key(object):
 
 		return chords
 
+	def get_chord_numerals(self):
+		numerals = ["i","ii","iii","iv","v","vi","vii"]
+		return ' '.join(numerals)
 
 
 

@@ -68,6 +68,7 @@ def main(stdscr):
 			s = ""
 			for chord in key.get_chords():
 				s += str(chord) + " "
+			s += "\n" + key.get_chord_numerals()
 			menu.set_response(s)
 		elif option == c.OPTN_GET_INTERVALS:
 			pass
