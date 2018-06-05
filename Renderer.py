@@ -1,4 +1,5 @@
 from Note import Note
+from Chord import Chord
 from GuitarNote import GuitarNote
 from GuitarChord import GuitarChord
 from GuitarFretboard import GuitarFretboard
@@ -57,16 +58,16 @@ class Renderer(object):
 		dashes_per_fret = self.get_num_dashes_per_fret()
 
 		def get_fret_pattern(note):
-			content = ""
+			marker = ""
 			if self.show_note_name:
-				content = note.get_note_name()
+				marker = note.get_note_name()
 			elif self.show_intervals:
-				content = c.INTVL_DICT[note.get_interval()]
+				marker = c.INTVL_DICT[note.get_interval()]
 			else:
-				content = "X"
-			root_fret_pattern = "*"*(2-len(content)) + content + "||"
-			dashes_buffer = float(dashes_per_fret - len(content))
-			return root_fret_pattern if note.get_fret() == 0 else "-"*int(ceil(dashes_buffer/2)) + content + "-"*int(floor(dashes_buffer/2)) + "|"
+				marker = "R" if note.get_interval() == 0 else "X"
+			root_fret_pattern = "*"*(2-len(marker)) + marker + "||"
+			dashes_buffer = float(dashes_per_fret - len(marker))
+			return root_fret_pattern if note.get_fret() == 0 else "-"*int(ceil(dashes_buffer/2)) + marker + "-"*int(floor(dashes_buffer/2)) + "|"
 		 
 		def draw_note_on_string(s, note, string):
 			# if GuitarNote ...
@@ -74,10 +75,10 @@ class Renderer(object):
 				note_buf = [note]	# display single note
 			elif type(note) is Note:
 				note_buf = string.find_note(note)  # display note at every location it occurs
-			elif type(note) is GuitarChord:
+			elif type(note) is Chord:
 				note_buf = note.get_notes()	# display chord
 			else:
-				raise ValueError("input 'note' must be of instance Note or [Note]")
+				raise ValueError("input 'note' must be of instance Note, [Note], or Chord")
 
 			for n in note_buf:
 				# skip note if on another string
@@ -96,6 +97,9 @@ class Renderer(object):
 			
 			if isinstance(pattern, list):		# display array of notes
 				for note in pattern:
+					s = draw_note_on_string(s, note, string)
+			elif isinstance(pattern, Chord):
+				for note in pattern.get_notes():
 					s = draw_note_on_string(s, note, string)
 			else:
 				s = draw_note_on_string(s, pattern, string)

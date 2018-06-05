@@ -7,6 +7,7 @@ class Menu(object):
 		self.w = stdscr
 		self.response = None
 		self.configure()
+		stdscr.keypad(1)
 
 	def __del__(self):
 		""" Reset the console."""
@@ -15,7 +16,7 @@ class Menu(object):
 
 	def configure(self):
 		""" Configure the console settings. """
-		self.w.keypad(False)
+		self.w.keypad(0)
 		curses.echo()
 		curses.nocbreak()
 
@@ -77,6 +78,12 @@ class Menu(object):
 		# print the menu options
 		for option in options_dict:
 			self.print_option(option, options_dict[option])
+
+	def is_left_arrow(self, user_input):
+		return user_input == curses.KEY_LEFT
+
+	def is_right_arrow(self, user_input):
+		return user_input == curses.KEY_RIGHT
 	
 	# -----------------
 	# |	Housekeeping  |

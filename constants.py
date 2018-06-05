@@ -161,5 +161,5 @@ INSTRUMENT_MENU_DICT = {
 	OPTN_DISPLAY_NOTES_IN_KEY : "Display notes in key on instrument",
 	OPTN_DISPLAY_CHORD : "Display chord on instrument",
 	OPTN_DISPLAY_SCALE : "Display scale on instrument",
-	OPTN_BACK : "Back"
+	OPTN_BACK : "Back (Main Menu)"
 }

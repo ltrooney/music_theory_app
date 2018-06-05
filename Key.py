@@ -45,8 +45,6 @@ class Key(object):
 			notes.append(scale_note)
 			scale_note = scale_note.up_whole()
 			notes.append(scale_note)
-			scale_note = scale_note.up_half()
-			notes.append(scale_note)
 		elif self.get_tonality() == TONALITY_MINOR:
 			scale_note = scale_note.up_whole()
 			notes.append(scale_note)
@@ -57,8 +55,6 @@ class Key(object):
 			scale_note = scale_note.up_whole()
 			notes.append(scale_note)
 			scale_note = scale_note.up_half()
-			notes.append(scale_note)
-			scale_note = scale_note.up_whole()
 			notes.append(scale_note)
 			scale_note = scale_note.up_whole()
 			notes.append(scale_note)

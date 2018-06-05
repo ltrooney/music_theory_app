@@ -9,7 +9,7 @@ from Menu import Menu
 from Renderer import Renderer
 import constants as c
 import re
-from curses import wrapper
+from curses import wrapper, KEY_LEFT, KEY_RIGHT, cbreak, nocbreak
 
 def parse_note(note_str):
 	""" Parse the input to determine the note and the accidental. 
@@ -26,7 +26,7 @@ def parse_note(note_str):
 	if m is None:
 		return
 	match_str = m.group(0)
-	return match_str[0], match_str[1:]
+	return match_str[0], match_str[2:]
 
 def main(stdscr):
 	menu = Menu(stdscr)
@@ -49,7 +49,7 @@ def main(stdscr):
 			if note_str is None:
 				menu.set_response(new_key_str + " is not a valid key!")
 			else:
-				root = Note(note_str[0], note_str[1])
+				root = Note(name=note_str[0], accidental=note_str[1])
 				key.set_tonic(root)
 
 				# check if key is minor
@@ -79,16 +79,40 @@ def main(stdscr):
 
 			while sub_option != c.OPTN_BACK:
 				menu.display(options_dict=c.INSTRUMENT_MENU_DICT, header="Instrument Viewer")
+				menu.printstr("Pick an option: ")
 				sub_option = int(menu.read_input())
 
 				if sub_option == c.OPTN_DISPLAY_ROOTS:
-					fretboard_str = renderer.plot(key.get_tonic())
-					menu.set_response(fretboard_str)
+					root = key.get_tonic()
+					fretboard_str = renderer.plot(root)
+					response = "Displaying all roots of " + str(root) + ".\n\n"
+					menu.set_response(response + fretboard_str)
 				elif sub_option == c.OPTN_DISPLAY_NOTES_IN_KEY:
 					fretboard_str = renderer.plot(key.get_notes())
-					menu.set_response(fretboard_str)
+					response = "Displaying all notes in the key of " + str(key) + ".\n\n"
+					menu.set_response(response + fretboard_str)
 				elif sub_option == c.OPTN_DISPLAY_CHORD:
-					pass
+					chords = key.get_chords()
+					chord_index = 0
+					cbreak()
+					while True:
+						curr_chord = chords[chord_index % (len(chords)-1)]
+						fretboard_str = renderer.plot(curr_chord)
+						menu.refresh()
+						menu.printstr_ln("Press left/right arrows to cycle through chords (press any other key to go back).")
+						menu.printstr_ln("Shown: " + str(curr_chord))
+						menu.printstr_ln(fretboard_str)
+
+						user_input = stdscr.getch()
+
+						if user_input == KEY_LEFT:
+							chord_index -= 1
+						elif user_input == KEY_RIGHT:
+							chord_index += 1
+						else:
+							break
+					nocbreak()
+
 				elif sub_option == c.OPTN_DISPLAY_SCALE:
 					pass
 				else:
