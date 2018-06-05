@@ -65,10 +65,16 @@ class Menu(object):
 		if self.has_response():
 			self.printstr_ln(self.get_response())
 
-	def display(self, options_dict):
+	def display(self, options_dict, header=None):
 		""" Show menu options. """
+		self.refresh()
 		self.print_response()
-		self.printstr_ln("-"*10 + "Music Theory Helper" + "-"*10)
+		# print the header
+		if header != None:
+			tot_header_len = 30
+			half_dashes = (tot_header_len - len(header)) / 2
+			self.printstr_ln("-"*half_dashes + header + "-"*half_dashes)
+		# print the menu options
 		for option in options_dict:
 			self.print_option(option, options_dict[option])
 	

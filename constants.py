@@ -139,19 +139,27 @@ OPTN_CHOOSE_KEY 		= 1
 OPTN_GET_NOTES_IN_KEY 	= 2
 OPTN_GET_CHORDS_IN_KEY 	= 3
 OPTN_GET_INTERVALS		= 4
-OPTN_DISPLAY_ROOTS		= 5
-OPTN_DISPLAY_NOTES_IN_KEY = 6
-OPTN_DISPLAY_CHORD		= 7
-OPTN_DISPLAY_SCALE		= 8
+OPTN_VIEW_INSTRUMENT	= 5
 
 MAIN_MENU_DICT = {
 	OPTN_CHOOSE_KEY : "Set key",
 	OPTN_GET_NOTES_IN_KEY : "Get notes in key",
 	OPTN_GET_CHORDS_IN_KEY : "Get chords in key",
 	OPTN_GET_INTERVALS : "Get intervals of root",
+	OPTN_VIEW_INSTRUMENT : "Instrument viewer",
+	OPTN_EXIT : "Exit"
+}
+
+OPTN_BACK				= 0
+OPTN_DISPLAY_ROOTS		= 1
+OPTN_DISPLAY_NOTES_IN_KEY = 2
+OPTN_DISPLAY_CHORD		= 3
+OPTN_DISPLAY_SCALE		= 4
+
+INSTRUMENT_MENU_DICT = {
 	OPTN_DISPLAY_ROOTS : "Display root positions",
 	OPTN_DISPLAY_NOTES_IN_KEY : "Display notes in key on instrument",
 	OPTN_DISPLAY_CHORD : "Display chord on instrument",
 	OPTN_DISPLAY_SCALE : "Display scale on instrument",
-	OPTN_EXIT : "Exit"
+	OPTN_BACK : "Back"
 }

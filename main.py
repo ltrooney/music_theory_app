@@ -32,17 +32,17 @@ def main(stdscr):
 	menu = Menu(stdscr)
 	response = None
 	key = Key(Note(c.NOTE_C))
-	menu.set_response("Current key: " + str(key))
 
-	while True:
-		menu.display(c.MAIN_MENU_DICT)
+	menu.set_response("Current key: " + str(key))
+	option = -1
+
+	while option != c.OPTN_EXIT:
+		menu.display(options_dict=c.MAIN_MENU_DICT, header="Main Menu")
 		
 		menu.printstr("Pick an option: ")
 		option = int(menu.read_input())
-
-		if option == c.OPTN_EXIT:
-			break
-		elif option == c.OPTN_CHOOSE_KEY:
+		
+		if option == c.OPTN_CHOOSE_KEY:
 			menu.printstr("New key: ")
 			new_key_str = menu.read_input()
 			note_str = parse_note(new_key_str)
@@ -72,18 +72,29 @@ def main(stdscr):
 			menu.set_response(s)
 		elif option == c.OPTN_GET_INTERVALS:
 			pass
-		elif option == c.OPTN_DISPLAY_ROOTS:
-			print r.plot(note)
-		elif option == c.OPTN_DISPLAY_NOTES_IN_KEY:
-			pass
-		elif option == c.OPTN_DISPLAY_CHORD:
-			pass
-		elif option == c.OPTN_DISPLAY_SCALE:
-			pass
+		elif option == c.OPTN_VIEW_INSTRUMENT:
+			fretboard = GuitarFretboard()
+			renderer = Renderer()
+			sub_option = -1
+
+			while sub_option != c.OPTN_BACK:
+				menu.display(options_dict=c.INSTRUMENT_MENU_DICT, header="Instrument Viewer")
+				sub_option = int(menu.read_input())
+
+				if sub_option == c.OPTN_DISPLAY_ROOTS:
+					fretboard_str = renderer.plot(key.get_tonic())
+					menu.set_response(fretboard_str)
+				elif sub_option == c.OPTN_DISPLAY_NOTES_IN_KEY:
+					fretboard_str = renderer.plot(key.get_notes())
+					menu.set_response(fretboard_str)
+				elif sub_option == c.OPTN_DISPLAY_CHORD:
+					pass
+				elif sub_option == c.OPTN_DISPLAY_SCALE:
+					pass
+				else:
+					menu.set_response("Invalid input.")
 		else:
 			menu.set_response("Invalid input.")
-
-		menu.refresh()
 
 wrapper(main)
 
